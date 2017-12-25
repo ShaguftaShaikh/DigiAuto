@@ -1,0 +1,25 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+#login{
+	-fx-background-color: rgb(51,55,108); 
+	-fx-text-fill: white;
+	-fx-font-size: 25;
+}
+
+#welcome-note{
+	-fx-font-size: 40;
+	-fx-fill: rgb(51,55,108);
+}
+
+#labels{
+	-fx-fill: rgb(51,55,108);
+	-fx-font-size: 20;
+}
+
+#fields{
+	-fx-font-size: 20;
+}
+
+#error-note{
+	-fx-font-size: 10;
+}

@@ -1,10 +1,15 @@
 package com.digiauto;
 
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
+
+import com.digiauto.beans.User;
+import com.digiauto.utils.HibernetUtils;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -20,16 +25,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
-	private final Configuration configuration;
-	private final StandardServiceRegistry serviceRegistry;
-	private final SessionFactory sessionFactory;
-
-	public Main() {
-		configuration = new Configuration().configure("hibernate.cfg.xml");
-		serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-		sessionFactory = configuration.configure().buildSessionFactory(serviceRegistry);
-	}
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -111,8 +106,8 @@ public class Main extends Application {
 				// TODO Auto-generated method stub
 				if (usernamaeField.getText() != null && !usernamaeField.getText().isEmpty()
 						&& passwordField.getText() != null && !passwordField.getText().isEmpty()) {
-					Session session = sessionFactory.openSession();
-	                session.beginTransaction();
+					
+					read(usernamaeField.getText(),passwordField.getText());
 				} else {
 					errorNote.setVisible(true);
 				}
@@ -125,4 +120,18 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
+	
+    public List<User> read(String username,String password){
+        Session session = HibernetUtils.getHibernateSession();
+        
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> userRoot=criteria.from(User.class);
+        criteria.select(userRoot);
+
+        criteria.where(builder.equal(userRoot.get("name"),username));
+        criteria.where(builder.equal(userRoot.get("password"), password));
+        List<User> userList=session.createQuery(criteria).getResultList();
+        return userList;
+   }  
 }

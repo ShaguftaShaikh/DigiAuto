@@ -13,13 +13,26 @@
 
 #labels{
 	-fx-fill: rgb(51,55,108);
-	-fx-font-size: 20;
+	-fx-font-size: 15;
 }
 
 #fields{
-	-fx-font-size: 20;
+	-fx-font-size: 15;
+	-fx-max-width: 400;
 }
 
-#error-note{
-	-fx-font-size: 10;
+#error{
+	-fx-font-size: 20;
+	-fx-fill: red;
+}
+
+#estimate{
+	-fx-font-size: 15;
+	-fx-fill: rgb(51,55,108);
+}
+
+#file-upload{
+	-fx-background-color: rgb(51,55,108); 
+	-fx-text-fill: white;
+	-fx-font-size: 15;
 }

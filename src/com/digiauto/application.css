@@ -1,38 +1,52 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.scroll-pane .scroll-bar:vertical {
+    -fx-unit-increment: 50 ;
+    -fx-block-increment: 50 ;
+}
 
 #login{
-	-fx-background-color: rgb(51,55,108); 
+	-fx-background-color: rgb(51.0,55.0,108.0); 
 	-fx-text-fill: white;
-	-fx-font-size: 25;
+	-fx-font-size: 25.0;
 }
 
 #welcome-note{
-	-fx-font-size: 40;
-	-fx-fill: rgb(51,55,108);
+	-fx-font-size: 40.0;
+	-fx-fill: rgb(51.0,55.0,108.0);
 }
 
 #labels{
-	-fx-fill: rgb(51,55,108);
-	-fx-font-size: 15;
+	-fx-fill: rgb(51.0,55.0,108.0);
+	-fx-font-size: 15.0;
 }
 
 #fields{
-	-fx-font-size: 15;
-	-fx-max-width: 400;
+	-fx-font-size: 15.0;
+	-fx-max-width: 400.0;
 }
 
 #error{
-	-fx-font-size: 20;
+	-fx-font-size: 20.0;
 	-fx-fill: red;
 }
 
 #estimate{
-	-fx-font-size: 15;
-	-fx-fill: rgb(51,55,108);
+	-fx-font-size: 15.0;
+	-fx-fill: rgb(51.0,55.0,108.0);
 }
 
 #file-upload{
-	-fx-background-color: rgb(51,55,108); 
+	-fx-background-color: rgb(51.0,55.0,108.0); 
 	-fx-text-fill: white;
-	-fx-font-size: 15;
+	-fx-font-size: 15.0;
+}
+
+#background{
+	 -fx-background-image: url("background.jpg");
+	 -fx-background-repeat: no-repeat;
+	 -fx-background-size: 1400.0 800.0;   
+}
+#error-label{
+	-fx-fill: red;
+	-fx-font-size: 15.0;
 }

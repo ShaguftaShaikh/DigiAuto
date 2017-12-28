@@ -54,6 +54,7 @@ public class Main extends Application {
 			error.setId("error");
 
 			GridPane gridPane = new GridPane();
+			gridPane.setId("background");
 
 			// Setting size for the pane
 			gridPane.setMinSize(400, 200);
@@ -98,7 +99,7 @@ public class Main extends Application {
 							error.setVisible(true);
 						} else {
 							try {
-								new Estimation().estimationScene(primaryStage);
+								new EstimationPhaseOne().estimationScene(primaryStage);
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();

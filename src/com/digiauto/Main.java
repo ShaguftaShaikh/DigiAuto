@@ -99,7 +99,7 @@ public class Main extends Application {
 							error.setVisible(true);
 						} else {
 							try {
-								new EstimationPhaseOne().estimationScene(primaryStage);
+								new GeneralDetails().generalDetailsScene(primaryStage);
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();

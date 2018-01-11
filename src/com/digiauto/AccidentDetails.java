@@ -1,26 +1,11 @@
 package com.digiauto;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Optional;
 
+import com.digiauto.beans.Customer;
 import com.digiauto.utils.DigiAutoConstants;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -49,18 +34,8 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class EstimationPhaseOne {
+public class AccidentDetails {
 
-	private Text customerName;
-	private Text contactNumber;
-	private Text address;
-	private Text carNumber;
-	private Text insured;
-	private Text drivingLicence;
-	private Text drivingLicenceIssueDate;
-	private Text drivingLicenceExpDate;
-	private Text rcBook;
-	private Text insurancePolicy;
 	private Text accidental;
 	private Text accidentDate;
 	private Text accidentPlace;
@@ -69,36 +44,18 @@ public class EstimationPhaseOne {
 	private Text policeCase;
 	private Text fir;
 	private Text punchnama;
-	private Text chassisNumber;
-	private Text engineNumber;
 	private Text commercialVehical;
 	private Text fitness;
-	private Text odometerReading;
-	private Button rcBookFiled;
 	private Button firField;
 	private Button punchnamaField;
 	private Button fitnessField;
 
-	private TextArea addressField;
+	private TextField accidentPlaceField;
 	private TextArea accidentDescriptionField;
 
-	private TextField customerNameField;
-	private TextField contactField;
-	private TextField accidentPlaceField;
-	private TextField odometerReadingField;
-	private TextField chassisNumberField;
-	private TextField engineNumberField;
-	private TextField drivingLicenceFiled;
-	private TextField insurancePolicyField;
-	private TextField carNumberField;
-
-	private ToggleGroup insuranceGroup;
 	private ToggleGroup accidentGroup;
 	private ToggleGroup policeCaseGroup;
 	private ToggleGroup commercialGroup;
-
-	private RadioButton insuranceYes;
-	private RadioButton insuranceNo;
 
 	private RadioButton accidentYes;
 	private RadioButton accidentNo;
@@ -110,8 +67,6 @@ public class EstimationPhaseOne {
 	private RadioButton commercialNo;
 
 	private DatePicker accidentDateField;
-	private DatePicker drivingLicenceIssueField;
-	private DatePicker drivingLicenceExpField;
 
 	private ComboBox<String> hourBox;
 	private ComboBox<String> minuteBox;
@@ -121,12 +76,12 @@ public class EstimationPhaseOne {
 	private Text estimateTitle;
 	private final FileChooser fileChooser = new FileChooser();
 
-	private File rcBookFile;
+	
 	private File fitnessCertificateFile;
 	private File firFile;
 	private File punchnamaFile;
 
-	public void estimationScene(Stage primaryStage) throws Exception {
+	public void estimationScene(Stage primaryStage, Customer customer) throws Exception {
 		// TODO Auto-generated method stub
 		try {
 			ScrollPane scrollPane = new ScrollPane();
@@ -140,21 +95,8 @@ public class EstimationPhaseOne {
 			initializeRadioButtons();
 			initializeDefaultValues();
 
-			addressField.setPrefRowCount(3);
 			accidentDescriptionField.setPrefRowCount(3);
-
-			rcBookFiled.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					rcBookFile = openFileDialog(primaryStage);
-				}
-
-			});
-
 			firField.setOnAction(new EventHandler<ActionEvent>() {
-
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
@@ -163,7 +105,6 @@ public class EstimationPhaseOne {
 			});
 
 			punchnamaField.setOnAction(new EventHandler<ActionEvent>() {
-
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
@@ -172,22 +113,20 @@ public class EstimationPhaseOne {
 			});
 
 			fitnessField.setOnAction(new EventHandler<ActionEvent>() {
-
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
 					fitnessCertificateFile = openFileDialog(primaryStage);
 				}
 			});
-
+			
 			GridPane gridPane = new GridPane();
 
 			gridPane.setVgap(25);
 			gridPane.setHgap(10);
 
 			gridPane.setAlignment(Pos.TOP_CENTER);
-
-			HBox insuredBox = new HBox();
+			
 			HBox accidentalBox = new HBox();
 			HBox policeCaseBox = new HBox();
 			HBox commercialBox = new HBox();
@@ -195,107 +134,44 @@ public class EstimationPhaseOne {
 			policeCaseBox.getChildren().addAll(policeCaseYes, policeCaseNo);
 			commercialBox.getChildren().addAll(commercialYes, commercialNo);
 
-			gridPane.addColumn(0, customerName);
-			gridPane.addColumn(1, customerNameField);
-
-			gridPane.addRow(1, contactNumber);
-			gridPane.addColumn(1, contactField);
-
-			gridPane.addRow(2, address);
-			gridPane.addColumn(1, addressField);
-
-			gridPane.addRow(3, insured);
-			insuredBox.setPadding(new Insets(15, 12, 15, 12));
-			insuredBox.setSpacing(10);
-			insuredBox.getChildren().addAll(insuranceYes, insuranceNo);
-			gridPane.addColumn(1, insuredBox);
-
-			gridPane.addRow(4, drivingLicence);
-			gridPane.addColumn(1, drivingLicenceFiled);
-
-			gridPane.addRow(5, drivingLicenceIssueDate);
-			gridPane.addColumn(1, drivingLicenceIssueField);
-
-			gridPane.addRow(6, drivingLicenceExpDate);
-			gridPane.addColumn(1, drivingLicenceExpField);
-
-			gridPane.addRow(7, rcBook);
-			gridPane.add(rcBookFiled, 1, 7);
-
-			gridPane.addRow(8, insurancePolicy);
-			gridPane.addColumn(1, insurancePolicyField);
-
-			gridPane.addRow(9, engineNumber);
-			gridPane.addColumn(1, engineNumberField);
-
-			gridPane.addRow(10, chassisNumber);
-			gridPane.addColumn(1, chassisNumberField);
-
-			gridPane.addRow(11, carNumber);
-			gridPane.addColumn(1, carNumberField);
-
-			gridPane.addColumn(2, accidental);
+			gridPane.addRow(0, accidental);
 			accidentalBox.setPadding(new Insets(15, 12, 15, 12));
 			accidentalBox.setSpacing(10);
 			accidentalBox.getChildren().addAll(accidentYes, accidentNo);
-			gridPane.addColumn(3, accidentalBox);
+			gridPane.addColumn(1, accidentalBox);
 
 			gridPane.addRow(1, accidentDate);
-			gridPane.addColumn(3, accidentDateField);
+			gridPane.addColumn(1, accidentDateField);
 
 			gridPane.addRow(2, accidentDescription);
-			gridPane.addColumn(3, accidentDescriptionField);
+			gridPane.addColumn(1, accidentDescriptionField);
 
 			gridPane.addRow(3, accidentTime);
 			timeBox.setPadding(new Insets(15, 12, 15, 12));
 			timeBox.setSpacing(10);
-			gridPane.addColumn(3, timeBox);
+			gridPane.addColumn(1, timeBox);
 
 			gridPane.addRow(4, accidentPlace);
-			gridPane.addColumn(3, accidentPlaceField);
+			gridPane.addColumn(1, accidentPlaceField);
 
-			gridPane.add(commercialVehical, 2, 5);
+			gridPane.addRow(5,commercialVehical);
 			commercialBox.setPadding(new Insets(15, 12, 15, 12));
 			commercialBox.setSpacing(10);
-			gridPane.addColumn(3, commercialBox);
+			gridPane.addColumn(1, commercialBox);
 
 			gridPane.addRow(6, fitness);
-			gridPane.addColumn(3, fitnessField);
+			gridPane.addColumn(1, fitnessField);
 
-			gridPane.add(policeCase, 2, 7);
+			gridPane.addRow(7,policeCase);
 			policeCaseBox.setPadding(new Insets(15, 12, 15, 12));
 			policeCaseBox.setSpacing(10);
-			gridPane.addColumn(3, policeCaseBox);
+			gridPane.addColumn(1, policeCaseBox);
 
 			gridPane.addRow(8, fir);
-			gridPane.addColumn(3, firField);
+			gridPane.addColumn(1, firField);
 
 			gridPane.addRow(9, punchnama);
-			gridPane.addColumn(3, punchnamaField);
-
-			gridPane.addRow(10, odometerReading);
-			gridPane.addColumn(3, odometerReadingField);
-			gridPane.addRow(11, prepare);
-
-			insuranceGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-				public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-					if (insuranceGroup.getSelectedToggle() != null) {
-						if (insuranceGroup.getSelectedToggle().getUserData().toString().equals("Yes")) {
-							drivingLicenceFiled.setDisable(false);
-							insurancePolicyField.setDisable(false);
-							drivingLicenceIssueField.setDisable(false);
-							drivingLicenceExpField.setDisable(false);
-							rcBookFiled.setDisable(false);
-						} else {
-							drivingLicenceFiled.setDisable(true);
-							insurancePolicyField.setDisable(true);
-							drivingLicenceIssueField.setDisable(true);
-							drivingLicenceExpField.setDisable(true);
-							rcBookFiled.setDisable(true);
-						}
-					}
-				}
-			});
+			gridPane.addColumn(1, punchnamaField);
 
 			accidentGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 				public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
@@ -350,7 +226,7 @@ public class EstimationPhaseOne {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					prepareDocument();
+					//prepareDocument();
 				}
 
 			});
@@ -380,12 +256,6 @@ public class EstimationPhaseOne {
 
 	private void initializeDefaultValues() {
 		// TODO Auto-generated method stub
-		drivingLicenceFiled.setDisable(true);
-		insurancePolicyField.setDisable(true);
-		drivingLicenceIssueField.setDisable(true);
-		drivingLicenceExpField.setDisable(true);
-		rcBookFiled.setDisable(true);
-
 		accidentDateField.setDisable(true);
 		accidentDescriptionField.setDisable(true);
 		hourBox.setDisable(true);
@@ -406,12 +276,6 @@ public class EstimationPhaseOne {
 		accidentYes.setUserData("Yes");
 		accidentNo.setUserData("No");
 
-		insuranceYes.setToggleGroup(insuranceGroup);
-		insuranceNo.setToggleGroup(insuranceGroup);
-		insuranceNo.setSelected(true);
-		insuranceYes.setUserData("Yes");
-		insuranceNo.setUserData("No");
-
 		policeCaseYes.setToggleGroup(policeCaseGroup);
 		policeCaseNo.setToggleGroup(policeCaseGroup);
 		policeCaseNo.setSelected(true);
@@ -429,19 +293,13 @@ public class EstimationPhaseOne {
 		// TODO Auto-generated method stub
 		prepare.setId("file-upload");
 
-		rcBookFiled.setId("file-upload");
+		
 		firField.setId("file-upload");
 		punchnamaField.setId("file-upload");
 		estimateTitle.setId("estimate");
 		fitnessField.setId("file-upload");
 
-		customerName.setId("labels");
-		contactNumber.setId("labels");
-		address.setId("labels");
-		drivingLicence.setId("labels");
-		insured.setId("labels");
-		rcBook.setId("labels");
-		insurancePolicy.setId("labels");
+		
 		accidental.setId("labels");
 		accidentDate.setId("labels");
 		accidentPlace.setId("labels");
@@ -452,19 +310,9 @@ public class EstimationPhaseOne {
 		punchnama.setId("labels");
 		commercialVehical.setId("labels");
 		fitness.setId("labels");
-		chassisNumber.setId("labels");
-		engineNumber.setId("labels");
-		drivingLicenceIssueDate.setId("labels");
-		drivingLicenceExpDate.setId("labels");
-		odometerReading.setId("labels");
-		carNumber.setId("labels");
-
-		customerNameField.setId("fields");
-		contactField.setId("fields");
-		addressField.setId("fields");
+		
 		accidentDateField.setId("fields");
-		insuranceYes.setId("fields");
-		insuranceNo.setId("fields");
+		
 		accidentYes.setId("fields");
 		accidentNo.setId("fields");
 		commercialYes.setId("fields");
@@ -476,38 +324,22 @@ public class EstimationPhaseOne {
 		accidentPlaceField.setId("fields");
 		policeCaseYes.setId("fields");
 		policeCaseNo.setId("fields");
-		chassisNumberField.setId("fields");
-		engineNumberField.setId("fields");
-		drivingLicenceFiled.setId("fields");
-		insurancePolicyField.setId("fields");
-		drivingLicenceIssueField.setId("fields");
-		drivingLicenceExpField.setId("fields");
-		odometerReadingField.setId("fields");
-		carNumberField.setId("fields");
+		
 	}
 
 	private void initalizeFields() {
 		// TODO Auto-generated method stub
-		addressField = new TextArea();
+		
 		accidentDescriptionField = new TextArea();
 
-		customerNameField = new TextField();
-		contactField = new TextField();
+		
 		accidentPlaceField = new TextField();
-		odometerReadingField = new TextField();
-		chassisNumberField = new TextField();
-		engineNumberField = new TextField();
-		drivingLicenceFiled = new TextField();
-		insurancePolicyField = new TextField();
-		carNumberField = new TextField();
-
-		insuranceGroup = new ToggleGroup();
+		
 		accidentGroup = new ToggleGroup();
 		policeCaseGroup = new ToggleGroup();
 		commercialGroup = new ToggleGroup();
 
-		insuranceYes = new RadioButton("Yes");
-		insuranceNo = new RadioButton("No");
+		
 
 		accidentYes = new RadioButton("Yes");
 		accidentNo = new RadioButton("No");
@@ -519,8 +351,7 @@ public class EstimationPhaseOne {
 		commercialNo = new RadioButton("No");
 
 		accidentDateField = new DatePicker();
-		drivingLicenceIssueField = new DatePicker();
-		drivingLicenceExpField = new DatePicker();
+		
 
 		ArrayList<String> hourList = new ArrayList<>();
 		ArrayList<String> minuteList = new ArrayList<>();
@@ -549,10 +380,6 @@ public class EstimationPhaseOne {
 		minuteBox = new ComboBox<String>(minutesOptions);
 		timeIndicatorBox = new ComboBox<String>(timeIndicator);
 
-		// hourBox.setValue("12");
-		// minuteBox.setValue("00");
-		// timeIndicatorBox.setValue("PM");
-
 		timeBox = new HBox();
 		timeBox.getChildren().addAll(hourBox, minuteBox, timeIndicatorBox);
 
@@ -560,17 +387,7 @@ public class EstimationPhaseOne {
 
 	private void initializeLables() {
 		// TODO Auto-generated method stub
-		customerName = new Text("Customer Name*:");
-		contactNumber = new Text("Contact Number*:");
-		address = new Text("Address*:");
-		carNumber = new Text("Car Number*:");
-
-		insured = new Text("Insured?*:");
-		drivingLicence = new Text("Driving Licence Number*:");
-		drivingLicenceIssueDate = new Text("Issue Date*:");
-		drivingLicenceExpDate = new Text("Expiry Date*:");
-		rcBook = new Text("RC Book*:");
-		insurancePolicy = new Text("Insurance Policy Number*:");
+		
 
 		accidental = new Text("Accidental?*:");
 		accidentDate = new Text("Accident Date*:");
@@ -582,14 +399,9 @@ public class EstimationPhaseOne {
 		fir = new Text("FIR*:");
 		punchnama = new Text("Punchnama*:");
 
-		chassisNumber = new Text("Chassis Number*:");
-		engineNumber = new Text("Engine Number*:");
-
 		commercialVehical = new Text("Commercial Vahical?*:");
 		fitness = new Text("Fitness Certificate*:");
-		odometerReading = new Text("Odometer Reading*");
-
-		rcBookFiled = new Button("Choose file to upload");
+		
 		firField = new Button("Choose file to upload");
 		punchnamaField = new Button("Choose file to upload");
 		fitnessField = new Button("Choose file to upload");
@@ -613,7 +425,7 @@ public class EstimationPhaseOne {
 		 */
 	}
 
-	private void prepareDocument() {
+	/*private void prepareDocument() {
 		// TODO Auto-generated method stub
 		boolean validate = validateInputs();
 		if (validate) {
@@ -681,7 +493,7 @@ public class EstimationPhaseOne {
 			}
 		}
 
-	}
+	}*/
 
 	private boolean showConfirmPopUp() {
 		// TODO Auto-generated method stub
@@ -701,88 +513,6 @@ public class EstimationPhaseOne {
 	private boolean validateInputs() {
 		// TODO Auto-generated method stub
 		boolean flag = true;
-		if (customerNameField.getText() == null || customerNameField.getText().isEmpty()) {
-			customerName.setId("error-label");
-			flag = false;
-		} else {
-			customerName.setId("labels");
-		}
-		if (contactField.getText() == null || contactField.getText().isEmpty()) {
-			contactNumber.setId("error-label");
-			flag = false;
-		} else {
-			contactNumber.setId("labels");
-		}
-		if (addressField.getText() == null || addressField.getText().isEmpty()) {
-			address.setId("error-label");
-			flag = false;
-		} else {
-			address.setId("labels");
-		}
-		if (carNumberField.getText() == null || carNumberField.getText().isEmpty()) {
-			carNumber.setId("error-label");
-			flag = false;
-		} else {
-			carNumber.setId("labels");
-		}
-
-		if (chassisNumberField.getText() == null || chassisNumberField.getText().isEmpty()) {
-			chassisNumber.setId("error-label");
-			flag = false;
-		} else {
-			chassisNumber.setId("labels");
-		}
-		if (odometerReadingField.getText() == null || odometerReadingField.getText().isEmpty()) {
-			odometerReading.setId("error-label");
-			flag = false;
-		} else {
-			odometerReading.setId("labels");
-		}
-		if (engineNumberField.getText() == null || engineNumberField.getText().isEmpty()) {
-			engineNumber.setId("error-label");
-			flag = false;
-		} else {
-			engineNumber.setId("labels");
-		}
-
-		if (insuranceYes.isSelected()) {
-			if (insurancePolicyField.getText() == null || insurancePolicyField.getText().isEmpty()) {
-				insurancePolicy.setId("error-label");
-				flag = false;
-			} else {
-				insurancePolicy.setId("labels");
-			}
-			if (drivingLicenceFiled.getText() == null || drivingLicenceFiled.getText().isEmpty()) {
-				drivingLicence.setId("error-label");
-				flag = false;
-			} else {
-				drivingLicence.setId("labels");
-			}
-			if (drivingLicenceIssueField.getValue() == null) {
-				drivingLicenceIssueDate.setId("error-label");
-				flag = false;
-			} else {
-				drivingLicenceIssueDate.setId("labels");
-			}
-			if (drivingLicenceExpField.getValue() == null) {
-				drivingLicenceExpDate.setId("error-label");
-				flag = false;
-			} else {
-				drivingLicenceExpDate.setId("labels");
-			}
-			if (rcBookFile == null) {
-				rcBook.setId("error-label");
-				flag = false;
-			} else {
-				rcBook.setId("labels");
-			}
-		} else {
-			rcBook.setId("labels");
-			drivingLicenceIssueDate.setId("labels");
-			drivingLicenceExpDate.setId("labels");
-			drivingLicence.setId("labels");
-			insurancePolicy.setId("labels");
-		}
 
 		if (accidentYes.isSelected()) {
 			if (accidentDateField.getValue() == null) {
